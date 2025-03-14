@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Perguntas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .game-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .options button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .options button:hover {
+            background-color: #45a049;
+        }
+        .timer {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        .score {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="question" id="question"></div>
+        <div class="options" id="options"></div>
+        <div class="timer" id="timer">30</div>
+        <div class="score" id="score">Pontuação: 0</div>
+    </div>
+
+    <script>
+        // Perguntas e Respostas
+        const questions = [
+            // Geografia
+            { question: "Qual é o maior país da África em termos de área?", options: ["Argélia", "Congo", "Sudão", "Angola"], correct: 0 },
+            { question: "Em que continente está localizada a cidade de Casablanca?", options: ["África", "Ásia", "Europa", "América do Sul"], correct: 0 },
+            { question: "Qual é o maior arquipélago do mundo?", options: ["Maldivas", "Filipinas", "Indonésia", "Japão"], correct: 2 },
+            { question: "Qual é a maior ilha do Caribe?", options: ["Cuba", "Jamaica", "República Dominicana", "Hispaniola"], correct: 0 },
+            { question: "Em qual continente está localizada a Cordilheira dos Andes?", options: ["América do Sul", "América do Norte", "África", "Ásia"], correct: 0 },
+            { question: "Qual é o maior país da América Latina em termos de área?", options: ["Argentina", "Brasil", "México", "Chile"], correct: 1 },
+            { question: "Qual é o nome da capital da Nova Zelândia?", options: ["Auckland", "Wellington", "Christchurch", "Hamilton"], correct: 1 },
+            { question: "Em que continente está localizado o deserto de Gobi?", options: ["África", "Ásia", "América do Norte", "Oceania"], correct: 1 },
+            { question: "Em que país está localizada a cidade de Petra?", options: ["Egito", "Jordânia", "Síria", "Líbano"], correct: 1 },
+            { question: "Qual é o maior lago de água doce do mundo em volume?", options: ["Lago Superior", "Lago Baikal", "Lago Victoria", "Lago Michigan"], correct: 1 },
+            
+            // Matemática
+            { question: "Qual é o valor de x na equação 3x - 7 = 14?", options: ["x = 7", "x = 5", "x = 3", "x = 6"], correct: 1 },
+            { question: "Qual é o valor de 4 elevado à potência de 3?", options: ["16", "64", "12", "48"], correct: 1 },
+            { question: "Qual é a fórmula da área de um triângulo?", options: ["b * h", "b * h / 2", "2 * b * h", "b + h"], correct: 1 },
+            { question: "Se um número x satisfaz a equação x² = 64, qual é o valor de x?", options: ["8", "-8", "±8", "4"], correct: 2 },
+            { question: "Qual é a soma dos ângulos internos de um quadrilátero?", options: ["180°", "360°", "270°", "450°"], correct: 1 },
+            { question: "Quantos números primos existem entre 1 e 20?", options: ["6", "8", "10", "4"], correct: 0 },
+            { question: "Qual é o valor de 5! (5 fatorial)?", options: ["120", "100", "60", "150"], correct: 0 },
+            { question: "Qual é o valor de log(100)?", options: ["1", "2", "10", "100"], correct: 1 },
+            { question: "Qual é o valor de 3³?", options: ["9", "27", "6", "18"], correct: 1 },
+            { question: "Quantos lados tem um decágono?", options: ["8", "10", "12", "14"], correct: 1 },
+            
+            // Conhecimentos Gerais
+            { question: "Quem foi o primeiro presidente dos Estados Unidos?", options: ["Thomas Jefferson", "George Washington", "Abraham Lincoln", "James Madison"], correct: 1 },
+            { question: "Em que ano foi fundada a Organização das Nações Unidas (ONU)?", options: ["1941", "1945", "1950", "1960"], correct: 1 },
+            { question: "Qual é o nome do primeiro homem a viajar para o espaço?", options: ["Yuri Gagarin", "Neil Armstrong", "Buzz Aldrin", "John Glenn"], correct: 0 },
+            { question: "Quem foi o autor da teoria da evolução das espécies?", options: ["Galileo Galilei", "Isaac Newton", "Charles Darwin", "Louis Pasteur"], correct: 2 },
+            { question: "Qual é o maior continente do mundo em termos de área?", options: ["África", "Ásia", "América do Norte", "Europa"], correct: 1 },
+            { question: "Quem escreveu 'A Divina Comédia'?", options: ["Dante Alighieri", "Giovanni Boccaccio", "Petrarca", "Miguel de Cervantes"], correct: 0 },
+            { question: "Qual é o nome da primeira mulher a ganhar o prêmio Nobel?", options: ["Marie Curie", "Madame Curie", "Lise Meitner", "Rosalind Franklin"], correct: 0 },
+            { question: "Quem foi o líder da Revolução Russa de 1917?", options: ["Joseph Stalin", "Vladimir Lenin", "Leon Trotsky", "Mikhail Gorbachev"], correct: 1 },
+            { question: "Em que cidade está localizado o Coliseu?", options: ["Roma", "Paris", "Atenas", "Istambul"], correct: 0 },
+            { question: "Qual é o maior mamífero do planeta?", options: ["Elefante Africano", "Baleia Azul", "Girafa", "Rinoceronte"], correct: 1 }
+        ];
+
+        // Função para embaralhar as perguntas
+        function shuffleQuestions() {
+            for (let i = questions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [questions[i], questions[j]] = [questions[j], questions[i]];
+            }
+        }
+
+        // Função para iniciar o jogo
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timer;
+        let timeRemaining = 30;
+
+        function startGame() {
+            shuffleQuestions(); // Embaralha as perguntas
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            if (currentQuestionIndex >= 10) {
+                clearInterval(timer);
+                document.getElementById('question').innerText = "Fim do jogo!";
+                document.getElementById('options').innerHTML = "";
+                document.getElementById('score').innerText = Sua pontuação: ${score};
+                return;
+            }
+
+            const currentQuestion = questions[currentQuestionIndex];
+            document.getElementById('question').innerText = currentQuestion.question;
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = "";
+            currentQuestion.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.innerText = option;
+                button.onclick = () => checkAnswer(index);
+                optionsContainer.appendChild(button);
+            });
+
+            timeRemaining = 30;
+            document.getElementById('timer').innerText = timeRemaining;
+            timer = setInterval(() => {
+                timeRemaining--;
+                document.getElementById('timer').innerText = timeRemaining;
+                if (timeRemaining <= 0) {
+                    clearInterval(timer);
+                    currentQuestionIndex++;
+                    displayQuestion();
+                }
+            }, 1000);
+        }
+
+        function checkAnswer(selectedIndex) {
+            const currentQuestion = questions[currentQuestionIndex];
+            if (selectedIndex === currentQuestion.correct) {
+                score++;
+            }
+            currentQuestionIndex++;
+            clearInterval(timer);
+            displayQuestion();
+        }
+
+        window.onload = startGame;
+    </script>
+</body>
+</html>
