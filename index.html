@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -86,7 +86,6 @@
             { question: "Qual é o maior país da América Latina em área?", options: ["Argentina", "Brasil", "México", "Chile"], correct: 1 },
             { question: "Quantos lados tem um decágono?", options: ["8", "10", "12", "6"], correct: 1 },
             { question: "Quem escreveu 'A Divina Comédia'?", options: ["Dante Alighieri", "Shakespeare", "Machado de Assis", "Cervantes"], correct: 0 },
-            { question: "Qual é o maior arquipélago do mundo?", options: ["Maldivas", "Filipinas", "Indonésia", "Japão"], correct: 2 },
             { question: "Quem foi o primeiro presidente dos EUA?", options: ["Thomas Jefferson", "George Washington", "Abraham Lincoln", "James Madison"], correct: 1 },
             { question: "Qual é a soma dos ângulos internos de um quadrilátero?", options: ["180°", "360°", "270°", "450°"], correct: 1 },
             { question: "Qual é a fórmula da área de um triângulo?", options: ["b * h", "b * h / 2", "2 * b * h", "b + h"], correct: 1 }
@@ -169,18 +168,9 @@
             }
         }
 
-        function startGame() {
-            startTimer();
-            shuffleQuestions();
-        }
-
         function restartGame() {
             startGame();
         }
-
-        document.getElementById('game-container').addEventListener("click", startGame);
-
-        startGame();
     </script>
 </body>
 </html>
