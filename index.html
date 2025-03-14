@@ -88,7 +88,8 @@
             { question: "Quem escreveu 'A Divina Comédia'?", options: ["Dante Alighieri", "Shakespeare", "Machado de Assis", "Cervantes"], correct: 0 },
             { question: "Quem foi o primeiro presidente dos EUA?", options: ["Thomas Jefferson", "George Washington", "Abraham Lincoln", "James Madison"], correct: 1 },
             { question: "Qual é a soma dos ângulos internos de um quadrilátero?", options: ["180°", "360°", "270°", "450°"], correct: 1 },
-            { question: "Qual é a fórmula da área de um triângulo?", options: ["b * h", "b * h / 2", "2 * b * h", "b + h"], correct: 1 }
+            { question: "Qual é a fórmula da área de um triângulo?", options: ["b * h", "b * h / 2", "2 * b * h", "b + h"], correct: 1 },
+            { question: "Em que ano o Brasil foi descoberto?", options: ["1492", "1500", "1822", "1789"], correct: 1 }
         ];
 
         let currentQuestionIndex = 0;
@@ -162,10 +163,19 @@
             if (currentQuestionIndex < 10) {
                 displayQuestion();
             } else {
-                document.getElementById('question').innerText = "Fim do jogo!";
-                document.getElementById('options').innerHTML = "";
-                document.getElementById('restart').style.display = "block";
+                endGame();
             }
+        }
+
+        function endGame() {
+            clearInterval(timer);
+            document.getElementById('question').innerText = "Fim do jogo!";
+            document.getElementById('options').innerHTML = "";
+
+            let resultado = score >= 6 ? "Parabéns, você passou!" : "Infelizmente, você não atingiu a média.";
+            document.getElementById('score').innerText = `Pontuação Final: ${score}/10\n${resultado}`;
+            
+            document.getElementById('restart').style.display = "block";
         }
 
         function restartGame() {
